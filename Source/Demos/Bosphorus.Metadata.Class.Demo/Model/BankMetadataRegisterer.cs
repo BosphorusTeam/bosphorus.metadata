@@ -6,7 +6,7 @@ namespace Bosphorus.Metadata.Class.Demo.Model
 {
     public class BankMetadataRegisterer: ClassMetadataRegisterer<Bank>
     {
-        protected override void Register(ClassMetadataRegistration<Bank> model)
+        protected override void Register(ClassMetadataRegistry<Bank> model)
         {
             model.Is<BusinessEntity>().Is<StaticData>();
             model.Property(x => x.Id).Is<Unique>().Is<Identificator>();

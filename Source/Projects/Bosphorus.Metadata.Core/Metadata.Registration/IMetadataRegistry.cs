@@ -2,9 +2,9 @@
 
 namespace Bosphorus.Metadata.Core.Metadata.Registration
 {
-    public interface IMetadataRegistration<TOwner>
+    public interface IMetadataRegistry<TOwner>
     {
-        IMetadataRegistration<TOwner> Is<TMetadata>() 
+        IMetadataRegistry<TOwner> Is<TMetadata>() 
             where TMetadata : IMetadata<TOwner>, new();
 
     }

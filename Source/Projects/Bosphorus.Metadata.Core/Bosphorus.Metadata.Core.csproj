@@ -54,11 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Installer.cs" />
+    <Compile Include="Metadata.Provider\DefaultMetadataProvider.cs" />
     <Compile Include="Metadata.Provider\IMetadataProvider.cs" />
-    <Compile Include="Metadata.Registration\DefaultMetadataRegistration.cs" />
-    <Compile Include="Metadata.Registration\IMetadataRegistration.cs" />
+    <Compile Include="Metadata.Registration\DefaultMetadataRepository.cs" />
+    <Compile Include="Metadata.Registration\IMetadataRepository.cs" />
+    <Compile Include="Metadata.Registration\MetadataRepositoryExtensions.cs" />
+    <Compile Include="Metadata.Registration\MetadataRegistry.cs" />
     <Compile Include="Metadata\IMetadata.cs" />
-    <Compile Include="Metadata\ParentMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

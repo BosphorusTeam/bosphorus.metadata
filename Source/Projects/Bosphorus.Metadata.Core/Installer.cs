@@ -1,6 +1,7 @@
 ﻿using Bosphorus.Common.Api.Container;
 using Bosphorus.Common.Api.Symbol;
 using Bosphorus.Metadata.Core.Metadata.Provider;
+using Bosphorus.Metadata.Core.Metadata.Registration;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -19,10 +20,13 @@ namespace Bosphorus.Metadata.Core
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
-                Classes.From(typeProvider.LoadedTypes)
-                    .BasedOn(typeof(IMetadataProvider<>))
-                    .WithService
-                    .FromInterface()
+                Component
+                    .For(typeof(IMetadataProvider<>))
+                    .ImplementedBy(typeof(DefaultMetadataProvider<>)),
+
+                Component
+                    .For(typeof(IMetadataRepository<>))
+                    .ImplementedBy(typeof(DefaultMetadataRepository<>))
             );
         }
     }

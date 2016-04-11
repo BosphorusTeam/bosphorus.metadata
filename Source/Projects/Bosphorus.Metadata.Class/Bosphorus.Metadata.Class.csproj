@@ -52,10 +52,9 @@
     <Compile Include="Metadata.Provider\ClassMetadataProvider.cs" />
     <Compile Include="Metadata.Provider\GenericClassMetadataProvider.cs" />
     <Compile Include="Metadata.Registration\ClassMetadataRegisterer.cs" />
-    <Compile Include="Metadata.Registration\ClassMetadataRegistration.cs" />
+    <Compile Include="Metadata.Registration\ClassMetadataRegistry.cs" />
     <Compile Include="Metadata\Identificator.cs" />
     <Compile Include="Metadata\PropertyMetadataExtensions.cs" />
-    <Compile Include="Metadata.Provider\PropertyMetadataWrapper.cs" />
     <Compile Include="Metadata\Unique.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

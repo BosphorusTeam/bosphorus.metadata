@@ -1,49 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Bosphorus.Metadata.Class.Metadata.Provider;
-using Bosphorus.Metadata.Core.Metadata;
-using Bosphorus.Metadata.Core.Metadata.Provider;
+using Bosphorus.Metadata.Core.Metadata.Registration;
 
 namespace Bosphorus.Metadata.Class.Metadata.Registration
 {
-    public abstract class ClassMetadataRegisterer<TModel> : IMetadataProvider<Type>, IMetadataProvider<PropertyInfo>
+    public abstract class ClassMetadataRegisterer<TModel>
     {
-        private readonly List<IMetadata<Type>> typeMetadatas;
-        private readonly List<IMetadata<PropertyInfo>> propertyMetadatas;
-
-        protected ClassMetadataRegisterer()
+        protected ClassMetadataRegisterer(IMetadataRepository<Type> typeMetadataRepository, IMetadataRepository<PropertyInfo> propertyMetadataRepository)
         {
-            this.typeMetadatas = new List<IMetadata<Type>>();
-            this.propertyMetadatas = new List<IMetadata<PropertyInfo>>();
-
-            ClassMetadataRegistration<TModel> registration = new ClassMetadataRegistration<TModel>(typeof(TModel), typeMetadatas, propertyMetadatas);
-            Register(registration);
-
-            this.typeMetadatas.AddRange(propertyMetadatas.Select(metadata => new PropertyMetadataWrapper() {ChildMetadata = metadata, Owner = typeof(TModel)} ));
+            ClassMetadataRegistry<TModel> registry = new ClassMetadataRegistry<TModel>(typeMetadataRepository, propertyMetadataRepository);
+            Register(registry);
         }
 
-        protected abstract void Register(ClassMetadataRegistration<TModel> model);
+        protected abstract void Register(ClassMetadataRegistry<TModel> model);
 
-        public IEnumerable<IMetadata<Type>> GetMetadatas(Type owner)
-        {
-            if (owner != typeof(TModel))
-            {
-                return Enumerable.Empty<IMetadata<Type>>();
-            }
-
-            return typeMetadatas;
-        }
-
-        public IEnumerable<IMetadata<PropertyInfo>> GetMetadatas(PropertyInfo owner)
-        {
-            if (owner.ReflectedType != typeof(TModel))
-            {
-                return Enumerable.Empty<IMetadata<PropertyInfo>>();
-            }
-
-            return propertyMetadatas;
-        }
     }
 }

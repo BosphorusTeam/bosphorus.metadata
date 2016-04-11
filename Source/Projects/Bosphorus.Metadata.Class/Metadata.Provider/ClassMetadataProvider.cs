@@ -4,22 +4,25 @@ using System.Linq;
 using System.Reflection;
 using Bosphorus.Metadata.Core.Metadata;
 using Bosphorus.Metadata.Core.Metadata.Provider;
+using Bosphorus.Metadata.Core.Metadata.Registration;
 
 namespace Bosphorus.Metadata.Class.Metadata.Provider
 {
     public class ClassMetadataProvider<TModel>
     {
-        private readonly IQueryable<IMetadata<Type>> metadatas;
+        private readonly IQueryable<IMetadata<Type>> typeMetadatas;
+        private readonly IQueryable<IMetadata<PropertyInfo>> propertyMetadatas;
 
-        public ClassMetadataProvider(IList<IMetadataProvider<Type>> metadataProviders)
+        public ClassMetadataProvider(IMetadataRepository<Type> typeMetadataRepository, IMetadataRepository<PropertyInfo> propertyMetadataRepository)
         {
-            this.metadatas = metadataProviders.SelectMany(provider => provider.GetMetadatas(typeof(TModel))).AsQueryable();
+            typeMetadatas = typeMetadataRepository.Metadatas.Where(metadata => metadata.Owner == typeof (TModel)).AsQueryable();
+            propertyMetadatas = propertyMetadataRepository.Metadatas.Where(metadata => metadata.Owner.ReflectedType == typeof(TModel)).AsQueryable();
         }
 
         public TMetadata GetMetadata<TMetadata>()
             where TMetadata : IMetadata<Type>
         {
-            TMetadata result = metadatas
+            TMetadata result = typeMetadatas
                 .OfType<TMetadata>()
                 .FirstOrDefault();
 
@@ -27,15 +30,9 @@ namespace Bosphorus.Metadata.Class.Metadata.Provider
         }
 
         public TMetadata GetMemberMetadata<TMetadata>()
-            where TMetadata : IMetadata<PropertyInfo>
+            where TMetadata : class, IMetadata<PropertyInfo>
         {
-            TMetadata result = metadatas
-                .OfType<PropertyMetadataWrapper>()
-                .Select(metadata => metadata.ChildMetadata)
-                .OfType<TMetadata>()
-                .FirstOrDefault();
-
-            return result;
+            return propertyMetadatas.First(metadata => metadata.GetType() == typeof (TMetadata)) as TMetadata;
         }
     }
 }

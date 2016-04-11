@@ -1,28 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using Bosphorus.Metadata.Core.Metadata;
 using Bosphorus.Metadata.Core.Metadata.Registration;
 
 namespace Bosphorus.Metadata.Class.Metadata.Registration
 {
-    public class ClassMetadataRegistration<TModel>: DefaultMetadataRegistration<Type>
+    public class ClassMetadataRegistry<TModel>
     {
-        private readonly IList<IMetadata<PropertyInfo>> propertyMetadatas;
+        private readonly IMetadataRepository<Type> typeMetadataRepository;
+        private readonly IMetadataRepository<PropertyInfo> propertyMetadataRepository;
 
-        public ClassMetadataRegistration(Type owner, IList<IMetadata<Type>> typeMetadatas, IList<IMetadata<PropertyInfo>> propertyMetadatas)
-            : base(owner, typeMetadatas)
+        public ClassMetadataRegistry(IMetadataRepository<Type> typeMetadataRepository, IMetadataRepository<PropertyInfo> propertyMetadataRepository)
         {
-            this.propertyMetadatas = propertyMetadatas;
+            this.typeMetadataRepository = typeMetadataRepository;
+            this.propertyMetadataRepository = propertyMetadataRepository;
         }
 
-        public IMetadataRegistration<PropertyInfo> Property(Expression<Func<TModel, object>> propertyExpression)
+        public MetadataRegistry<Type> Type => typeMetadataRepository.RegistryFor(typeof(TModel));
+
+        public MetadataRegistry<PropertyInfo> Property(Expression<Func<TModel, object>> propertyExpression)
         {
             MemberExpression memberExpression = GetMemberExpression(propertyExpression);
             PropertyInfo memberInfo = memberExpression.Member as PropertyInfo;
-            IMetadataRegistration<PropertyInfo> memberMetadataRegistration = new DefaultMetadataRegistration<PropertyInfo>(memberInfo, propertyMetadatas);
-            return memberMetadataRegistration;
+            var metadataRegistry = propertyMetadataRepository.RegistryFor(memberInfo);
+            return metadataRegistry;
         }
 
         private MemberExpression GetMemberExpression(Expression<Func<TModel, object>> expression)
@@ -30,7 +31,6 @@ namespace Bosphorus.Metadata.Class.Metadata.Registration
             MemberExpression body = expression.Body as MemberExpression ?? ((UnaryExpression)expression.Body).Operand as MemberExpression;
             return body;
         }
-
-   }
+    }
 
 }

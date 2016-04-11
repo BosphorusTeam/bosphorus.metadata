@@ -20,13 +20,9 @@ namespace Bosphorus.Metadata.Core
         {
             container.Register(
                 Classes.From(typeProvider.LoadedTypes)
-                    .BasedOn(typeof(IMetadataBuilder<>))
+                    .BasedOn(typeof(IMetadataProvider<>))
                     .WithService
-                    .FromInterface(),
-
-                Component
-                    .For(typeof(IMetadataProvider<>))
-                    .ImplementedBy(typeof(DefaultMetadataProvider<>))
+                    .FromInterface()
             );
         }
     }

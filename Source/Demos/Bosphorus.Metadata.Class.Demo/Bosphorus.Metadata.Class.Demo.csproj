@@ -64,8 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Metadata\BusinessEntity.cs" />
+    <Compile Include="Model\Bank.cs" />
+    <Compile Include="Model\BankMetadataRegisterer.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\CustomerMetadataRegisterer.cs" />
+    <Compile Include="Metadata\StaticData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleDemo.cs" />

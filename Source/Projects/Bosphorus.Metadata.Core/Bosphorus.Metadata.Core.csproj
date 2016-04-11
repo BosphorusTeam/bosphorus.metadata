@@ -54,8 +54,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Installer.cs" />
-    <Compile Include="Metadata.Provider\DefaultMetadataProvider.cs" />
-    <Compile Include="Metadata.Provider\IMetadataBuilder.cs" />
     <Compile Include="Metadata.Provider\IMetadataProvider.cs" />
     <Compile Include="Metadata.Registration\DefaultMetadataRegistration.cs" />
     <Compile Include="Metadata.Registration\IMetadataRegistration.cs" />

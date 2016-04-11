@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Bosphorus.Metadata.Core.Metadata;
@@ -10,9 +11,9 @@ namespace Bosphorus.Metadata.Class.Metadata.Provider
     {
         private readonly IQueryable<IMetadata<Type>> metadatas;
 
-        public ClassMetadataProvider(IMetadataProvider<Type> metadataProvider)
+        public ClassMetadataProvider(IList<IMetadataProvider<Type>> metadataProviders)
         {
-            this.metadatas = metadataProvider.GetMetadatas(typeof (TModel));
+            this.metadatas = metadataProviders.SelectMany(provider => provider.GetMetadatas(typeof(TModel))).AsQueryable();
         }
 
         public TMetadata GetMetadata<TMetadata>()

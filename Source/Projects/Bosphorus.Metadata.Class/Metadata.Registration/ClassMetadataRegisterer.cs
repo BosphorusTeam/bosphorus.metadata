@@ -8,7 +8,7 @@ using Bosphorus.Metadata.Core.Metadata.Provider;
 
 namespace Bosphorus.Metadata.Class.Metadata.Registration
 {
-    public abstract class ClassMetadataRegisterer<TModel> : IMetadataBuilder<Type>, IMetadataBuilder<PropertyInfo>
+    public abstract class ClassMetadataRegisterer<TModel> : IMetadataProvider<Type>, IMetadataProvider<PropertyInfo>
     {
         private readonly List<IMetadata<Type>> typeMetadatas;
         private readonly List<IMetadata<PropertyInfo>> propertyMetadatas;
@@ -24,26 +24,26 @@ namespace Bosphorus.Metadata.Class.Metadata.Registration
             this.typeMetadatas.AddRange(propertyMetadatas.Select(metadata => new PropertyMetadataWrapper() {ChildMetadata = metadata, Owner = typeof(TModel)} ));
         }
 
-        protected abstract void Register(ClassMetadataRegistration<TModel> registration);
+        protected abstract void Register(ClassMetadataRegistration<TModel> model);
 
-        public IEnumerable<IMetadata<Type>> Build(Type owner)
+        public IEnumerable<IMetadata<Type>> GetMetadatas(Type owner)
         {
-            if (owner != typeof (TModel))
+            if (owner != typeof(TModel))
             {
                 return Enumerable.Empty<IMetadata<Type>>();
             }
 
             return typeMetadatas;
         }
-        public IEnumerable<IMetadata<PropertyInfo>> Build(PropertyInfo owner)
+
+        public IEnumerable<IMetadata<PropertyInfo>> GetMetadatas(PropertyInfo owner)
         {
-            if (owner.ReflectedType != typeof (TModel))
+            if (owner.ReflectedType != typeof(TModel))
             {
                 return Enumerable.Empty<IMetadata<PropertyInfo>>();
             }
 
             return propertyMetadatas;
         }
-
     }
 }

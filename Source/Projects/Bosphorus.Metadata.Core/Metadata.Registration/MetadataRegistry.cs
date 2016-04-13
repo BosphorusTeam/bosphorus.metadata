@@ -1,4 +1,6 @@
-﻿namespace Bosphorus.Metadata.Core.Metadata.Registration
+﻿using Bosphorus.Metadata.Core.Metadata.Repository;
+
+namespace Bosphorus.Metadata.Core.Metadata.Registration
 {
     public class MetadataRegistry<TOwner>
     {
@@ -15,7 +17,7 @@
             where TMetadata : IMetadata<TOwner>, new()
         {
             TMetadata metadata = new TMetadata();
-            metadata.Owner = owner;
+            ((dynamic)metadata).Owner = owner;
             repository.Metadatas.Add(metadata);
 
             return this;

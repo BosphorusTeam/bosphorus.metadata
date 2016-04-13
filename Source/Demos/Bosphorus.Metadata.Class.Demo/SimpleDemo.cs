@@ -9,29 +9,29 @@ namespace Bosphorus.Metadata.Class.Demo
 {
     public class SimpleDemo: AbstractMethodExecutionItemList
     {
-        private readonly GenericClassMetadataProvider classMetadataProvider;
+        private readonly ClassMetadataProvider<Customer> customerMetadataProvider;
 
-        public SimpleDemo(IWindsorContainer container, GenericClassMetadataProvider classMetadataProvider) 
+        public SimpleDemo(IWindsorContainer container, ClassMetadataProvider<Customer> customerMetadataProvider) 
             : base(container)
         {
-            this.classMetadataProvider = classMetadataProvider;
+            this.customerMetadataProvider = customerMetadataProvider;
         }
 
         public BusinessEntity Type_Simple()
         {
-            BusinessEntity businessEntity = classMetadataProvider.Of<Customer>().GetMetadata<BusinessEntity>();
+            BusinessEntity businessEntity = customerMetadataProvider.GetMetadata<BusinessEntity>();
             return businessEntity;
         }
 
         public Identificator Member_Identificator()
         {
-            Identificator identificator = classMetadataProvider.Of<Customer>().GetMemberMetadata<Identificator>();
+            Identificator identificator = customerMetadataProvider.GetMemberMetadata<Identificator>();
             return identificator;
         }
 
         public Unique Member_Unique()
         {
-            Unique unique = classMetadataProvider.Of<Customer>().GetMemberMetadata<Unique>();
+            Unique unique = customerMetadataProvider.GetMemberMetadata<Unique>();
             return unique;
         }
 

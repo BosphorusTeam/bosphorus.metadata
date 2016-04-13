@@ -12,27 +12,41 @@ namespace Bosphorus.Metadata.Class
     public class Installer: IBosphorusInstaller
     {
         private readonly ITypeProvider typeProvider;
+        private readonly IWindsorContainer container;
 
-        public Installer(ITypeProvider typeProvider)
+        public Installer(ITypeProvider typeProvider, IWindsorContainer container)
         {
             this.typeProvider = typeProvider;
+            this.container = container;
         }
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(
                 Classes.From(typeProvider.LoadedTypes)
-                    .BasedOn(typeof(ClassMetadataRegisterer<>))
+                    .BasedOn(typeof(IClassMetadataRegisterer<>))
                     .WithService
                     .Self()
-                    .Configure(registration => registration.LifeStyle.Singleton.Start()),
+                    .Configure(Configure),
 
                 Component
-                    .For(typeof(ClassMetadataProvider<>)),
+                    .For(typeof(ClassMetadataRegistry<>)),
 
                 Component
-                    .For<GenericClassMetadataProvider>()
+                    .For(typeof(ClassMetadataProvider<>))
             );
+        }
+
+        private void Configure(ComponentRegistration registration)
+        {
+            registration.LifeStyle.Singleton.Start();
+            registration.OnCreate(classRegisterer => ExecuteRegistration((dynamic)classRegisterer)); // GOOD TRICK :)
+        }
+
+        private void ExecuteRegistration<TModel>(IClassMetadataRegisterer<TModel> classMetadataRegisterer)
+        {
+            var classMetadataRegistry = container.Resolve<ClassMetadataRegistry<TModel>>();
+            classMetadataRegisterer.Register(classMetadataRegistry);
         }
     }
 }

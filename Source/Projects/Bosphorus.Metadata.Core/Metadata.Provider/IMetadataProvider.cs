@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 
 namespace Bosphorus.Metadata.Core.Metadata.Provider
 {
-    public interface IMetadataProvider<TOwner>
+    public interface IMetadataProvider<out TOwner>
     {
-        IEnumerable<IMetadata<TOwner>> GetMetadatas(TOwner owner);
+        IQueryable<IMetadata<TOwner>> Metadatas { get; }
 
     }
 }

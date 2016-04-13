@@ -1,7 +1,8 @@
 ﻿namespace Bosphorus.Metadata.Core.Metadata
 {
-    public interface IMetadata<TOwner>
+    public interface IMetadata<out TOwner>
     {
-        TOwner Owner { get; set; }
+        TOwner Owner { get; }
     }
+
 }

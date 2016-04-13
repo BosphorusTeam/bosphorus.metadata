@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Bosphorus.Metadata.Core.Metadata.Registration;
+﻿using System.Linq;
+using Bosphorus.Metadata.Core.Metadata.Repository;
 
 namespace Bosphorus.Metadata.Core.Metadata.Provider
 {
@@ -13,10 +12,6 @@ namespace Bosphorus.Metadata.Core.Metadata.Provider
             this.repository = repository;
         }
 
-        public IEnumerable<IMetadata<TOwner>> GetMetadatas(TOwner owner)
-        {
-            var result = repository.Metadatas.Where(metadata => metadata.Owner.Equals(owner));
-            return result;
-        }
+        public IQueryable<IMetadata<TOwner>> Metadatas => repository.Metadatas.AsQueryable();
     }
 }

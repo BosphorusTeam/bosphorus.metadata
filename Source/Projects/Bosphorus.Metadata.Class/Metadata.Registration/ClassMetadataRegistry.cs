@@ -2,27 +2,26 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using Bosphorus.Metadata.Core.Metadata.Registration;
+using Bosphorus.Metadata.Core.Metadata.Repository;
 
 namespace Bosphorus.Metadata.Class.Metadata.Registration
 {
     public class ClassMetadataRegistry<TModel>
     {
-        private readonly IMetadataRepository<Type> typeMetadataRepository;
-        private readonly IMetadataRepository<PropertyInfo> propertyMetadataRepository;
+        private readonly GenericMetadataRepostiory genericMetadataRepostiory;
 
-        public ClassMetadataRegistry(IMetadataRepository<Type> typeMetadataRepository, IMetadataRepository<PropertyInfo> propertyMetadataRepository)
+        public ClassMetadataRegistry(GenericMetadataRepostiory genericMetadataRepostiory)
         {
-            this.typeMetadataRepository = typeMetadataRepository;
-            this.propertyMetadataRepository = propertyMetadataRepository;
+            this.genericMetadataRepostiory = genericMetadataRepostiory;
         }
 
-        public MetadataRegistry<Type> Type => typeMetadataRepository.RegistryFor(typeof(TModel));
+        public MetadataRegistry<Type> Type => genericMetadataRepostiory.RegistryFor(typeof(TModel));
 
         public MetadataRegistry<PropertyInfo> Property(Expression<Func<TModel, object>> propertyExpression)
         {
             MemberExpression memberExpression = GetMemberExpression(propertyExpression);
             PropertyInfo memberInfo = memberExpression.Member as PropertyInfo;
-            var metadataRegistry = propertyMetadataRepository.RegistryFor(memberInfo);
+            var metadataRegistry = genericMetadataRepostiory.RegistryFor(memberInfo);
             return metadataRegistry;
         }
 

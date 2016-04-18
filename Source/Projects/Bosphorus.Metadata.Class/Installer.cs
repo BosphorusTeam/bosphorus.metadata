@@ -33,7 +33,7 @@ namespace Bosphorus.Metadata.Class
                     .For(typeof(ClassMetadataRegistry<>)),
 
                 Component
-                    .For(typeof(ClassMetadataProvider<>))
+                    .For(typeof(ClassMetadata<>))
             );
         }
 
